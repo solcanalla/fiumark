@@ -38,6 +38,11 @@ def decisiontree_preprocessing():
 	df = pd.concat([df, filled], axis=1)
 	del df['edad']
 
+	#Categórica, volvería aparecia como categorica en pandas profiling asique fuerzo a números.
+	label_encoder = preprocessing.LabelEncoder()
+	label_encoder.fit(df.volveria)
+	df.volveria = label_encoder.transform(df.volveria)
+
 	#Categoricas con baja cardinalidad
 	#genero, nombre de sede, tipo de sala y fila.
 
