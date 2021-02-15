@@ -15,15 +15,12 @@ def get_dataset():
 	df = df1.merge(df2,on='id_usuario', how='left')
 	return df
 
-def get_train_test_data(df):
+def get_train(df):
 	y = df.volveria
 	X = df.drop(columns='volveria')
-	return train_test_split(X, y, test_size=0.15, random_state=42)
+	return X,y
 
-def decisiontree_preprocessing():
-	#Get dataset
-	df = get_dataset()
-
+def decisiontree_preprocessing(df):
 	#Clean
 	del df['nombre']
 
@@ -37,11 +34,6 @@ def decisiontree_preprocessing():
 	filled = pd.DataFrame(edad_filled).add_prefix('edad_')
 	df = pd.concat([df, filled], axis=1)
 	del df['edad']
-
-	#Categórica, volvería aparecia como categorica en pandas profiling asique fuerzo a números.
-	label_encoder = LabelEncoder()
-	label_encoder.fit(df.volveria)
-	df.volveria = label_encoder.transform(df.volveria)
 
 	#Categoricas con baja cardinalidad
 	#genero, nombre de sede, tipo de sala y fila.
@@ -82,4 +74,3 @@ def decisiontree_preprocessing():
 	del df['id_ticket']
 
 	return df
-
