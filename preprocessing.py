@@ -39,7 +39,7 @@ def decisiontree_preprocessing():
 	del df['edad']
 
 	#Categórica, volvería aparecia como categorica en pandas profiling asique fuerzo a números.
-	label_encoder = preprocessing.LabelEncoder()
+	label_encoder = LabelEncoder()
 	label_encoder.fit(df.volveria)
 	df.volveria = label_encoder.transform(df.volveria)
 
