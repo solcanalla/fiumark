@@ -4,8 +4,10 @@ import numpy as np
 from sklearn.impute import SimpleImputer
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import (
-    LabelEncoder,
-    OneHotEncoder,
+	LabelEncoder,
+	OneHotEncoder,
+	Normalizer,
+	MinMaxScaler
 )
 
 
@@ -20,7 +22,12 @@ def get_train(df):
 	X = df.drop(columns='volveria')
 	return X,y
 
-def decisiontree_preprocessing(df):
+def get_train_test_data(df):
+	y = df.volveria
+	X = df.drop(columns='volveria')
+	return train_test_split(X, y, test_size=0.15, random_state=42)
+
+def common_preprocessing(df):
 	#Clean
 	del df['nombre']
 
@@ -74,3 +81,19 @@ def decisiontree_preprocessing(df):
 	del df['id_ticket']
 
 	return df
+
+def decistiontree_preprocessing():
+	df = get_dataset()
+	df = common_preprocessing(df)
+	return get_train_test_data(df)
+
+def knn_preprocessing():
+	df = get_dataset()
+	df = common_preprocessing(df)
+	y = df.volveria
+	X = df.drop(columns='volveria')
+	scaler = MinMaxScaler() #Si normalizo tengo un 0.7
+	X = MinMaxScaler().fit_transform(X)
+	return train_test_split(X, y, test_size=0.15, random_state=42)
+
+
