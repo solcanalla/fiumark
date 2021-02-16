@@ -28,6 +28,9 @@ def get_train_test_data(df):
 	return train_test_split(X, y, test_size=0.15, random_state=42)
 
 def common_preprocessing(df):
+	#Reseteo el indice por si entro con el train 
+	df.reset_index(inplace=True,drop=True)
+	
 	#Clean
 	del df['nombre']
 
@@ -82,18 +85,11 @@ def common_preprocessing(df):
 
 	return df
 
-def decistiontree_preprocessing():
-	df = get_dataset()
-	df = common_preprocessing(df)
-	return get_train_test_data(df)
+def decisiontree_preprocessing(X):
+	return common_preprocessing(X)
 
-def knn_preprocessing():
-	df = get_dataset()
-	df = common_preprocessing(df)
-	y = df.volveria
-	X = df.drop(columns='volveria')
+def knn_preprocessing(X):
+	X = common_preprocessing(X)
 	scaler = MinMaxScaler() #Si normalizo tengo un 0.7
-	X = MinMaxScaler().fit_transform(X)
-	return train_test_split(X, y, test_size=0.15, random_state=42)
-
-
+	X = scaler.fit_transform(X)
+	return X
