@@ -62,17 +62,14 @@ def common_preprocessing(df,ohe):
 
 	return df
 
-def decisiontree_preprocessing(X):
-	return common_preprocessing(X)
+def decisiontree_preprocessing(X,ohe):
+	return common_preprocessing(X,ohe)
 
-def knn_preprocessing(X,ohe,scaler):
+def knn_preprocessing(X,ohe):
 	X = common_preprocessing(X,ohe) #Si normalizo tengo 0.7
-	X = scaler.transform(X)
+	X = MinMaxScaler().fit_transform(X)
 	return X
 
 def get_ohe_fit(df):
 	ohe = OneHotEncoder(drop='first')
 	return ohe.fit(df[['genero','fila','nombre_sede','tipo_de_sala']].astype(str))
-	
-def get_scaler(df):
-	return MinMaxScaler().fit(df)
