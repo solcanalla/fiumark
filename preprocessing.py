@@ -17,20 +17,16 @@ def get_dataset():
 	df = df1.merge(df2,on='id_usuario', how='left')
 	return df
 
-def get_train(df):
-	y = df.volveria
-	X = df.drop(columns='volveria')
-	return X,y
-
 def get_train_test_data(df):
 	y = df.volveria
 	X = df.drop(columns='volveria')
 	return train_test_split(X, y, test_size=0.15, random_state=42)
 
-def common_preprocessing(df,ohe):
+def common_preprocessing(df):
 	#Reseteo el indice por si entro con el train 
 	df.reset_index(inplace=True,drop=True)
-	
+	ohe = OneHotEncoder(drop='first')
+	ohe = ohe.fit(df[['genero','fila','nombre_sede','tipo_de_sala']].astype(str))
 	#Clean
 	del df['nombre']
 
@@ -62,14 +58,13 @@ def common_preprocessing(df,ohe):
 
 	return df
 
-def decisiontree_preprocessing(X,ohe):
-	return common_preprocessing(X,ohe)
+def decisiontree_preprocessing(X):
+	return common_preprocessing(X)
 
-def knn_preprocessing(X,ohe):
-	X = common_preprocessing(X,ohe) #Si normalizo tengo 0.7
-	X = MinMaxScaler().fit_transform(X)
+def knn_preprocessing(X):
+	X = common_preprocessing(X) #Si normalizo tengo 0.7
+	X = pd.DataFrame(MinMaxScaler().fit_transform(X), index=X.index, columns=X.columns)
 	return X
 
-def get_ohe_fit(df):
-	ohe = OneHotEncoder(drop='first')
-	return ohe.fit(df[['genero','fila','nombre_sede','tipo_de_sala']].astype(str))
+
+
