@@ -4,9 +4,7 @@ import numpy as np
 from sklearn.impute import SimpleImputer
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import (
-	LabelEncoder,
 	OneHotEncoder,
-	Normalizer,
 	MinMaxScaler
 )
 
@@ -20,23 +18,21 @@ def get_dataset():
 def get_train_test_data(df):
 	y = df.volveria
 	X = df.drop(columns='volveria')
-	return train_test_split(X, y, test_size=0.15, random_state=42)
+	return train_test_split(X, y, test_size=0.20, random_state=42)
 
 def common_preprocessing(df):
-	#Reseteo el indice por si entro con el train 
 	df.reset_index(inplace=True,drop=True)
-	ohe = OneHotEncoder(drop='first')
-	ohe = ohe.fit(df[['genero','fila','nombre_sede','tipo_de_sala']].astype(str))
+	
 	#Clean
 	del df['nombre']
 
 	#Missing values
-	#edad 20%
 	#fila 80%
 	#nombre_sede 0.2%
 
-	median_imputer = SimpleImputer(strategy='median')
-	edad_filled = median_imputer.fit_transform(df[['edad']])
+	#Missing values
+	#edad 20%
+	edad_filled = SimpleImputer(strategy='median').fit_transform(df[['edad']])
 	filled = pd.DataFrame(edad_filled).add_prefix('edad_')
 	df = pd.concat([df, filled], axis=1)
 	del df['edad']
@@ -45,6 +41,7 @@ def common_preprocessing(df):
 	#genero, nombre de sede, tipo de sala y fila.
 
 	#Encondeo sin orden
+	ohe = OneHotEncoder(drop='first').fit(df[['genero','fila','nombre_sede','tipo_de_sala']].astype(str))
 	matrix_result = ohe.transform(df[['genero','fila','nombre_sede','tipo_de_sala']].astype(str)).todense().astype(int)
 	df = pd.concat([df, pd.DataFrame(matrix_result)], axis=1)
 
@@ -65,6 +62,7 @@ def knn_preprocessing(X):
 	X = common_preprocessing(X) #Si normalizo tengo 0.7
 	X = pd.DataFrame(MinMaxScaler().fit_transform(X), index=X.index, columns=X.columns)
 	return X
+
 
 
 
