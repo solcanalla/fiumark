@@ -55,9 +55,6 @@ def common_preprocessing(df):
 
 	return df
 
-def decisiontree_preprocessing(X):
-	return common_preprocessing(X)
-
 def knn_preprocessing(X):
 	X = common_preprocessing(X) #Si normalizo tengo 0.7
 	X = pd.DataFrame(MinMaxScaler().fit_transform(X), index=X.index, columns=X.columns)
