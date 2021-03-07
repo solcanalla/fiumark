@@ -9,7 +9,7 @@ Organización de datos: TP 2. Modelos supervisados para predecir si un cliente v
 - XGBoost
 - Stacking (KNN + Random Forest + XGBoost)
 
-##Correcciones v2
+## Correcciones v2
 - Agregar por lo menos dos más que no sean ensambles
 - Revisar los hiperparámetros que prueban en los gridsearch/randomsearch, que sean los importantes de cada modelos y que sean valores razonables para el problema
 - Corregir los campos que quedaron con nombres numéricos en el preprocessing :white_check_mark:
