@@ -18,7 +18,7 @@ def get_dataset():
 def get_train_test_data(df):
 	y = df.volveria
 	X = df.drop(columns='volveria')
-	return train_test_split(X, y, test_size=0.20, random_state=42)
+	return train_test_split(X, y, test_size=0.15, random_state=42)
 
 def common_preprocessing(df):
 	df.reset_index(inplace=True,drop=True)
@@ -41,25 +41,27 @@ def common_preprocessing(df):
 	#genero, nombre de sede, tipo de sala y fila.
 
 	#Encondeo sin orden
-	ohe = OneHotEncoder(drop='first').fit(df[['genero','fila','nombre_sede','tipo_de_sala']].astype(str))
-	matrix_result = ohe.transform(df[['genero','fila','nombre_sede','tipo_de_sala']].astype(str)).todense().astype(int)
-	df = pd.concat([df, pd.DataFrame(matrix_result)], axis=1)
-
+	columns_to_encode = ['genero','fila','nombre_sede','tipo_de_sala']
+	df_to_encode = pd.DataFrame(df[columns_to_encode],columns=columns_to_encode)
+	ohe = OneHotEncoder(drop='first').fit(df_to_encode.astype(str))
+	column_name = ohe.get_feature_names(df_to_encode.columns)
+	one_hot_encoded_frame =  pd.DataFrame(ohe.transform(df_to_encode.astype(str)).todense().astype(int), columns= column_name)
+	
 	del df['genero']
 	del df['nombre_sede']
 	del df['tipo_de_sala']
 	del df['fila']
 
-	#Categóricas de alta cardinalidad
+	df = pd.concat([df, one_hot_encoded_frame], axis=1)
+ 	#Categóricas de alta cardinalidad
 	del df['id_ticket']
 
 	return df
+
+def decisiontree_preprocessing(X):
+	return common_preprocessing(X)
 
 def knn_preprocessing(X):
 	X = common_preprocessing(X) #Si normalizo tengo 0.7
 	X = pd.DataFrame(MinMaxScaler().fit_transform(X), index=X.index, columns=X.columns)
 	return X
-
-
-
-
