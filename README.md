@@ -8,6 +8,7 @@ Organización de datos: TP 2. Modelos supervisados para predecir si un cliente v
 - Random Forest
 - XGBoost
 - Stacking (KNN + Random Forest + XGBoost)
+- Redes Neuronales 
 
 ## Correcciones v2
 - Agregar por lo menos dos más que no sean ensambles
