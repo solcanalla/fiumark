@@ -132,7 +132,7 @@ def knn_preprocessing(X):
 	X = pd.DataFrame(MinMaxScaler().fit_transform(X), index=X.index, columns=X.columns)
 	return X
 
-def scaler_min_features_preprocessing(df):
+def scaler_min_features_preprocessing(X):
 	X = min_features_preprocessing(X)
 	X = pd.DataFrame(MinMaxScaler().fit_transform(X), index=X.index, columns=X.columns)
 	return df
