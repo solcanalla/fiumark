@@ -102,7 +102,8 @@ def min_features_preprocessing(df):
 	#fila 80% - elimino por missing values 
 	del df['fila']
 
-	#nombre_sede 0.2%
+	#nombre_sede 0.2% - elimino por missing values 
+	del df['nombre_sede']
 
 	#Missing values
 	#edad 20% - elimino por los missing values 	
@@ -112,14 +113,13 @@ def min_features_preprocessing(df):
 	#genero, nombre de sede, tipo de sala
 
 	#Encondeo sin orden
-	columns_to_encode = ['genero','nombre_sede','tipo_de_sala']
+	columns_to_encode = ['genero','tipo_de_sala']
 	df_to_encode = pd.DataFrame(df[columns_to_encode],columns=columns_to_encode)
 	ohe = OneHotEncoder(drop='first').fit(df_to_encode.astype(str))
 	column_name = ohe.get_feature_names(df_to_encode.columns)
 	one_hot_encoded_frame =  pd.DataFrame(ohe.transform(df_to_encode.astype(str)).todense().astype(int), columns= column_name)
 	
 	del df['genero']
-	del df['nombre_sede']
 	del df['tipo_de_sala']
 
 	df = pd.concat([df, one_hot_encoded_frame], axis=1)
