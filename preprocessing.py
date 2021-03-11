@@ -59,22 +59,19 @@ def common_preprocessing(df):
 	return df
 
 def ff_column_preprocessing(df):
-
-	df_precio['categoria_precio'] = df['precio_ticket'].apply(categoria)
-
-	# Reemplazo normal por 2d
-	df = df.replace({'tipo_de_sala':'normal'},'2d')
-
-	# Reemplazo el nombre de la sede
-	df = df.replace({'nombre_sede':'fiumark_palermo'},'Palermo')
-	df = df.replace({'nombre_sede':'fiumark_chacarita'},'Chacarita')
-	df = df.replace({'nombre_sede':'fiumark_quilmes'},'Quilmes')
-
-	#Agrupo amigos y parientes en compañidea
-	df["compañía"] = df["amigos"] + df["parientes"]
+	## Relleno nombre_sede con el más repetido
+	sede_filled = SimpleImputer(strategy='most_frequent').fit_transform(df[['nombre_sede']])
+	filled = pd.DataFrame(sede_filled).add_prefix('sede_')
+	df = pd.concat([df, filled], axis=1)
+	del df['nombre_sede']
+	
+	#Agrupo amigos y parientes en compañia
+	df['compañía'] = df['amigos'] + df['parientes']
+	del df['amigos']
+	del df['parientes']
 
 	#Encondeo sin orden
-	columns_to_encode = ['genero','fila','nombre_sede','tipo_de_sala']
+	columns_to_encode = ['genero','fila','tipo_de_sala']
 	df_to_encode = pd.DataFrame(df[columns_to_encode],columns=columns_to_encode)
 	ohe = OneHotEncoder(drop='first').fit(df_to_encode.astype(str))
 	column_name = ohe.get_feature_names(df_to_encode.columns)
@@ -84,8 +81,7 @@ def ff_column_preprocessing(df):
 	del df['nombre_sede']
 	del df['tipo_de_sala']
 	del df['fila']
-	del df['amigos']
-	del df['parientes']
+	
 	
 	df = pd.concat([df, one_hot_encoded_frame], axis=1)
 
@@ -128,9 +124,6 @@ def min_features_preprocessing(df):
 
 	return df
 
-def decisiontree_preprocessing(X):
-	return common_preprocessing(X)
-
 def knn_preprocessing(X):
 	X = common_preprocessing(X) #Si normalizo tengo 0.7
 	X = pd.DataFrame(MinMaxScaler().fit_transform(X), index=X.index, columns=X.columns)
@@ -138,5 +131,10 @@ def knn_preprocessing(X):
 
 def scaler_min_features_preprocessing(X):
 	X = min_features_preprocessing(X)
+	X = pd.DataFrame(MinMaxScaler().fit_transform(X), index=X.index, columns=X.columns)
+	return X
+
+def scaler_ff_column_preprocessing(X):
+	X = ff_column_preprocessing(X)
 	X = pd.DataFrame(MinMaxScaler().fit_transform(X), index=X.index, columns=X.columns)
 	return X
