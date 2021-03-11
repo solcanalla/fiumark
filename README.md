@@ -17,3 +17,4 @@ Organización de datos: TP 2. Modelos supervisados para predecir si un cliente v
 - Corregir los campos que quedaron con nombres numéricos en el preprocessing :white_check_mark:
 - Realizar más de un pre-procesado en cada modelo
 - Extender las conclusiones del informe, explicar porque algunos modelos anduvieron mejor que otros y cualquier otra reflexión que se les ocurra.
+- Plotear curva auc con sklearn
