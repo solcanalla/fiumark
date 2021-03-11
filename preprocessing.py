@@ -60,7 +60,7 @@ def common_preprocessing(df):
 
 def ff_column_preprocessing(df):
 
-	df_precio['categoria_precio'] = df_precio['precio_ticket'].apply(categoria)
+	df_precio['categoria_precio'] = df['precio_ticket'].apply(categoria)
 
 	# Reemplazo normal por 2d
 	df = df.replace({'tipo_de_sala':'normal'},'2d')
@@ -93,18 +93,23 @@ def ff_column_preprocessing(df):
 
 def min_features_preprocessing(df):
 
-	df_precio['categoria_precio'] = df_precio['precio_ticket'].apply(categoria)
+	df.reset_index(inplace=True,drop=True)
+	
+	#Clean
+	del df['nombre']
 
-	# Reemplazo normal por 2d
-	df = df.replace({'tipo_de_sala':'normal'},'2d')
+	#Missing values
+	#fila 80% - elimino por missing values 
+	del df['fila']
 
-	# Reemplazo el nombre de la sede
-	df = df.replace({'nombre_sede':'fiumark_palermo'},'Palermo')
-	df = df.replace({'nombre_sede':'fiumark_chacarita'},'Chacarita')
-	df = df.replace({'nombre_sede':'fiumark_quilmes'},'Quilmes')
+	#nombre_sede 0.2%
 
-	#Agrupo amigos y parientes en compañidea
-	df["compañía"] = df["amigos"] + df["parientes"]
+	#Missing values
+	#edad 20% - elimino por los missing values 	
+	del df['edad']
+
+	#Categoricas con baja cardinalidad
+	#genero, nombre de sede, tipo de sala
 
 	#Encondeo sin orden
 	columns_to_encode = ['genero','nombre_sede','tipo_de_sala']
@@ -112,15 +117,14 @@ def min_features_preprocessing(df):
 	ohe = OneHotEncoder(drop='first').fit(df_to_encode.astype(str))
 	column_name = ohe.get_feature_names(df_to_encode.columns)
 	one_hot_encoded_frame =  pd.DataFrame(ohe.transform(df_to_encode.astype(str)).todense().astype(int), columns= column_name)
-
+	
 	del df['genero']
 	del df['nombre_sede']
 	del df['tipo_de_sala']
-	del df['fila']
-	del df['amigos']
-	del df['parientes']
-	
+
 	df = pd.concat([df, one_hot_encoded_frame], axis=1)
+ 	#Categóricas de alta cardinalidad
+	del df['id_ticket']
 
 	return df
 
