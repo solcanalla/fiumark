@@ -131,3 +131,8 @@ def knn_preprocessing(X):
 	X = common_preprocessing(X) #Si normalizo tengo 0.7
 	X = pd.DataFrame(MinMaxScaler().fit_transform(X), index=X.index, columns=X.columns)
 	return X
+
+def scaler_min_features_preprocessing(df):
+	X = min_features_preprocessing(X)
+	X = pd.DataFrame(MinMaxScaler().fit_transform(X), index=X.index, columns=X.columns)
+	return df
