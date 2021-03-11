@@ -9,9 +9,10 @@ Organización de datos: TP 2. Modelos supervisados para predecir si un cliente v
 - XGBoost
 - Stacking (KNN + Random Forest + XGBoost)
 - Redes Neuronales 
+- Naive Bayes
 
 ## Correcciones v2
-- Agregar por lo menos dos más que no sean ensambles
+- Agregar por lo menos dos más que no sean ensambles :white_check_mark:
 - Revisar los hiperparámetros que prueban en los gridsearch/randomsearch, que sean los importantes de cada modelos y que sean valores razonables para el problema
 - Corregir los campos que quedaron con nombres numéricos en el preprocessing :white_check_mark:
 - Realizar más de un pre-procesado en cada modelo
