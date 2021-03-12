@@ -78,7 +78,6 @@ def ff_column_preprocessing(df):
 	one_hot_encoded_frame =  pd.DataFrame(ohe.transform(df_to_encode.astype(str)).todense().astype(int), columns= column_name)
 
 	del df['genero']
-	del df['nombre_sede']
 	del df['tipo_de_sala']
 	del df['fila']
 	
