@@ -59,6 +59,8 @@ def common_preprocessing(df):
 	return df
 
 def ff_column_preprocessing(df):
+	del df['nombre']
+
 	## Relleno nombre_sede con el más repetido
 	sede_filled = SimpleImputer(strategy='most_frequent').fit_transform(df[['nombre_sede']])
 	filled = pd.DataFrame(sede_filled).add_prefix('sede_')
