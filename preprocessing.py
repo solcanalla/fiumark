@@ -68,7 +68,7 @@ def ff_column_preprocessing(df):
 	del df['parientes']
 
 	#Encondeo sin orden
-	columns_to_encode = ['genero','fila','tipo_de_sala'] 
+	columns_to_encode = ['genero','tipo_de_sala'] 
 	df_to_encode = pd.DataFrame(df[columns_to_encode],columns=columns_to_encode)
 	ohe = OneHotEncoder(drop='first').fit(df_to_encode.astype(str))
 	column_name = ohe.get_feature_names(df_to_encode.columns)
