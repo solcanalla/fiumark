@@ -61,6 +61,8 @@ def common_preprocessing(df):
 def ff_column_preprocessing(df):
 	del df['nombre']
 	del df['nombre_sede']
+	del df['edad']
+
 	
 	#Agrupo amigos y parientes en compañia
 	df['compañía'] = df['amigos'] + df['parientes']
