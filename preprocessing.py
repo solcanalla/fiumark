@@ -60,11 +60,6 @@ def common_preprocessing(df):
 
 def ff_column_preprocessing(df):
 	del df['nombre']
-
-	## Relleno nombre_sede con el más repetido
-	sede_filled = SimpleImputer(strategy='most_frequent').fit_transform(df[['nombre_sede']])
-	filled = pd.DataFrame(sede_filled).add_prefix('sede_')
-	df = pd.concat([df, filled], axis=1)
 	del df['nombre_sede']
 	
 	#Agrupo amigos y parientes en compañia
@@ -73,7 +68,7 @@ def ff_column_preprocessing(df):
 	del df['parientes']
 
 	#Encondeo sin orden
-	columns_to_encode = ['genero','fila','tipo_de_sala']
+	columns_to_encode = ['genero','fila','tipo_de_sala'] 
 	df_to_encode = pd.DataFrame(df[columns_to_encode],columns=columns_to_encode)
 	ohe = OneHotEncoder(drop='first').fit(df_to_encode.astype(str))
 	column_name = ohe.get_feature_names(df_to_encode.columns)
@@ -85,6 +80,8 @@ def ff_column_preprocessing(df):
 	
 	
 	df = pd.concat([df, one_hot_encoded_frame], axis=1)
+	#Categóricas de alta cardinalidad
+	del df['id_ticket']
 
 	return df
 
